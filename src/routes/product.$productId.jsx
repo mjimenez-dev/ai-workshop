@@ -40,7 +40,7 @@ import {
 } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
 import { Link as RouterLink, useNavigate } from '@tanstack/react-router';
-import { ProductDetailSkeleton } from '../components/SkeletonLoaders';
+import { ProductDetailSkeleton } from '../components/SkeletonLoaders.jsx';
 
 const ProductDetailComponent = () => {
   const { productId } = Route.useParams();

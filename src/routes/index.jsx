@@ -29,7 +29,7 @@ import {
 import { Star, TrendingUp } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
 import { Link } from '@tanstack/react-router';
-import { ProductGridSkeleton, CategorySidebarSkeleton } from '../components/SkeletonLoaders';
+import { ProductGridSkeleton, CategorySidebarSkeleton } from '../components/SkeletonLoaders.jsx';
 
 const HomeComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
