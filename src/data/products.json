@@ -1,0 +1,470 @@
+[
+  {
+    "id": "iphone-15-pro",
+    "name": "iPhone 15 Pro",
+    "description": "The most advanced iPhone with titanium design and A17 Pro chip. Features professional camera system with 5x telephoto zoom.",
+    "price": 999.99,
+    "image": "https://picsum.photos/400/300?random=1",
+    "categoryId": "smartphones",
+    "inStock": true,
+    "rating": {
+      "average": 4.8,
+      "count": 1247
+    }
+  },
+  {
+    "id": "samsung-galaxy-s24",
+    "name": "Samsung Galaxy S24 Ultra",
+    "description": "Premium Android flagship with S Pen and 200MP camera. Built with Galaxy AI for enhanced productivity and creativity.",
+    "price": 1199.99,
+    "image": "https://picsum.photos/400/300?random=2",
+    "categoryId": "smartphones",
+    "inStock": true,
+    "rating": {
+      "average": 4.6,
+      "count": 892
+    }
+  },
+  {
+    "id": "google-pixel-8",
+    "name": "Google Pixel 8",
+    "description": "Pure Android experience with exceptional computational photography. Powered by Google Tensor G3 chip for AI features.",
+    "price": 699.99,
+    "image": "https://picsum.photos/400/300?random=3",
+    "categoryId": "smartphones",
+    "inStock": false,
+    "rating": {
+      "average": 4.4,
+      "count": 567
+    }
+  },
+  {
+    "id": "oneplus-12",
+    "name": "OnePlus 12",
+    "description": "Flagship killer with 120Hz display and ultra-fast charging. Features Hasselblad camera partnership for stunning photos.",
+    "price": 799.99,
+    "image": "https://picsum.photos/400/300?random=4",
+    "categoryId": "smartphones",
+    "inStock": true,
+    "rating": {
+      "average": 4.3,
+      "count": 423
+    }
+  },
+  {
+    "id": "macbook-pro-m3",
+    "name": "MacBook Pro 14-inch M3",
+    "description": "Professional laptop with M3 chip delivering exceptional performance. Features Liquid Retina XDR display and up to 22 hours battery life.",
+    "price": 1599.99,
+    "image": "https://picsum.photos/400/300?random=5",
+    "categoryId": "laptops",
+    "inStock": true,
+    "rating": {
+      "average": 4.9,
+      "count": 734
+    }
+  },
+  {
+    "id": "dell-xps-13",
+    "name": "Dell XPS 13 Plus",
+    "description": "Ultra-thin laptop with Intel 13th gen processor and stunning InfinityEdge display. Perfect for professionals and creators.",
+    "price": 1299.99,
+    "image": "https://picsum.photos/400/300?random=6",
+    "categoryId": "laptops",
+    "inStock": true,
+    "rating": {
+      "average": 4.5,
+      "count": 512
+    }
+  },
+  {
+    "id": "lenovo-thinkpad-x1",
+    "name": "Lenovo ThinkPad X1 Carbon",
+    "description": "Business laptop with military-grade durability and exceptional keyboard. Features Intel vPro platform for enterprise security.",
+    "price": 1499.99,
+    "image": "https://picsum.photos/400/300?random=7",
+    "categoryId": "laptops",
+    "inStock": false,
+    "rating": {
+      "average": 4.7,
+      "count": 389
+    }
+  },
+  {
+    "id": "gaming-laptop-asus",
+    "name": "ASUS ROG Strix G16",
+    "description": "High-performance gaming laptop with RTX 4070 graphics and 165Hz display. Built for serious gamers and content creators.",
+    "price": 1899.99,
+    "image": "https://picsum.photos/400/300?random=8",
+    "categoryId": "laptops",
+    "inStock": true,
+    "rating": {
+      "average": 4.4,
+      "count": 267
+    }
+  },
+  {
+    "id": "ipad-pro-m2",
+    "name": "iPad Pro 12.9-inch M2",
+    "description": "Most advanced iPad with M2 chip and Liquid Retina XDR display. Compatible with Apple Pencil and Magic Keyboard.",
+    "price": 1099.99,
+    "image": "https://picsum.photos/400/300?random=9",
+    "categoryId": "tablets",
+    "inStock": true,
+    "rating": {
+      "average": 4.8,
+      "count": 923
+    }
+  },
+  {
+    "id": "samsung-tab-s9",
+    "name": "Samsung Galaxy Tab S9 Ultra",
+    "description": "Premium Android tablet with S Pen included and massive 14.6-inch display. Perfect for productivity and entertainment.",
+    "price": 1199.99,
+    "image": "https://picsum.photos/400/300?random=10",
+    "categoryId": "tablets",
+    "inStock": true,
+    "rating": {
+      "average": 4.6,
+      "count": 445
+    }
+  },
+  {
+    "id": "surface-pro-9",
+    "name": "Microsoft Surface Pro 9",
+    "description": "2-in-1 laptop tablet with Intel 12th gen processor. Includes detachable keyboard and Surface Pen support.",
+    "price": 999.99,
+    "image": "https://picsum.photos/400/300?random=11",
+    "categoryId": "tablets",
+    "inStock": false,
+    "rating": {
+      "average": 4.3,
+      "count": 678
+    }
+  },
+  {
+    "id": "ipad-air-m1",
+    "name": "iPad Air M1",
+    "description": "Powerful and versatile tablet with M1 chip performance. Features 10.9-inch Liquid Retina display and all-day battery life.",
+    "price": 599.99,
+    "image": "https://picsum.photos/400/300?random=12",
+    "categoryId": "tablets",
+    "inStock": true,
+    "rating": {
+      "average": 4.7,
+      "count": 1156
+    }
+  },
+  {
+    "id": "airpods-pro-2",
+    "name": "Apple AirPods Pro 2nd Gen",
+    "description": "Premium wireless earbuds with adaptive transparency and personalized spatial audio. Features up to 2x more active noise cancellation.",
+    "price": 249.99,
+    "image": "https://picsum.photos/400/300?random=13",
+    "categoryId": "headphones",
+    "inStock": true,
+    "rating": {
+      "average": 4.8,
+      "count": 2134
+    }
+  },
+  {
+    "id": "sony-wh1000xm5",
+    "name": "Sony WH-1000XM5",
+    "description": "Industry-leading noise canceling over-ear headphones with exceptional sound quality. Features 30-hour battery life and quick charge.",
+    "price": 399.99,
+    "image": "https://picsum.photos/400/300?random=14",
+    "categoryId": "headphones",
+    "inStock": true,
+    "rating": {
+      "average": 4.9,
+      "count": 1567
+    }
+  },
+  {
+    "id": "bose-quietcomfort",
+    "name": "Bose QuietComfort Ultra",
+    "description": "Premium noise-canceling headphones with breakthrough spatial audio technology. Delivers world-class quiet and comfort.",
+    "price": 429.99,
+    "image": "https://picsum.photos/400/300?random=15",
+    "categoryId": "headphones",
+    "inStock": false,
+    "rating": {
+      "average": 4.7,
+      "count": 834
+    }
+  },
+  {
+    "id": "sennheiser-hd650",
+    "name": "Sennheiser HD 650",
+    "description": "Audiophile open-back headphones with legendary sound signature. Preferred by professionals and music enthusiasts worldwide.",
+    "price": 499.99,
+    "image": "https://picsum.photos/400/300?random=16",
+    "categoryId": "headphones",
+    "inStock": true,
+    "rating": {
+      "average": 4.8,
+      "count": 692
+    }
+  },
+  {
+    "id": "apple-watch-ultra-2",
+    "name": "Apple Watch Ultra 2",
+    "description": "Most rugged Apple Watch with titanium case and sapphire crystal display. Built for extreme sports and outdoor adventures.",
+    "price": 799.99,
+    "image": "https://picsum.photos/400/300?random=17",
+    "categoryId": "smartwatches",
+    "inStock": true,
+    "rating": {
+      "average": 4.6,
+      "count": 456
+    }
+  },
+  {
+    "id": "samsung-galaxy-watch-6",
+    "name": "Samsung Galaxy Watch 6 Classic",
+    "description": "Premium smartwatch with rotating bezel and comprehensive health monitoring. Features sleep coaching and body composition analysis.",
+    "price": 429.99,
+    "image": "https://picsum.photos/400/300?random=18",
+    "categoryId": "smartwatches",
+    "inStock": true,
+    "rating": {
+      "average": 4.4,
+      "count": 723
+    }
+  },
+  {
+    "id": "garmin-fenix-7",
+    "name": "Garmin Fenix 7X Sapphire",
+    "description": "Multisport GPS watch with solar charging and advanced training metrics. Built for athletes and outdoor enthusiasts.",
+    "price": 899.99,
+    "image": "https://picsum.photos/400/300?random=19",
+    "categoryId": "smartwatches",
+    "inStock": false,
+    "rating": {
+      "average": 4.8,
+      "count": 312
+    }
+  },
+  {
+    "id": "fitbit-sense-2",
+    "name": "Fitbit Sense 2",
+    "description": "Health and fitness smartwatch with stress management tools and 6+ day battery life. Includes ECG and skin temperature sensor.",
+    "price": 299.99,
+    "image": "https://picsum.photos/400/300?random=20",
+    "categoryId": "smartwatches",
+    "inStock": true,
+    "rating": {
+      "average": 4.3,
+      "count": 1089
+    }
+  },
+  {
+    "id": "sony-a7r5",
+    "name": "Sony Alpha 7R V",
+    "description": "High-resolution full-frame mirrorless camera with 61MP sensor and advanced AI autofocus. Perfect for professional photography.",
+    "price": 3899.99,
+    "image": "https://picsum.photos/400/300?random=21",
+    "categoryId": "cameras",
+    "inStock": true,
+    "rating": {
+      "average": 4.9,
+      "count": 178
+    }
+  },
+  {
+    "id": "canon-r6-mark-ii",
+    "name": "Canon EOS R6 Mark II",
+    "description": "Versatile full-frame mirrorless camera with excellent low-light performance. Features in-body image stabilization and 4K video.",
+    "price": 2499.99,
+    "image": "https://picsum.photos/400/300?random=22",
+    "categoryId": "cameras",
+    "inStock": true,
+    "rating": {
+      "average": 4.7,
+      "count": 234
+    }
+  },
+  {
+    "id": "fujifilm-xt5",
+    "name": "Fujifilm X-T5",
+    "description": "APS-C mirrorless camera with classic design and film simulation modes. Delivers exceptional image quality in compact body.",
+    "price": 1699.99,
+    "image": "https://picsum.photos/400/300?random=23",
+    "categoryId": "cameras",
+    "inStock": false,
+    "rating": {
+      "average": 4.6,
+      "count": 345
+    }
+  },
+  {
+    "id": "dji-action-4",
+    "name": "DJI Action 4",
+    "description": "Ultra-compact action camera with 4K/120fps recording and magnetic mounting system. Perfect for adventure photography and videography.",
+    "price": 399.99,
+    "image": "https://picsum.photos/400/300?random=24",
+    "categoryId": "cameras",
+    "inStock": true,
+    "rating": {
+      "average": 4.5,
+      "count": 567
+    }
+  },
+  {
+    "id": "ps5-console",
+    "name": "PlayStation 5",
+    "description": "Next-generation gaming console with ultra-high speed SSD and ray tracing. Experience immersive gaming with haptic feedback controller.",
+    "price": 499.99,
+    "image": "https://picsum.photos/400/300?random=25",
+    "categoryId": "gaming",
+    "inStock": false,
+    "rating": {
+      "average": 4.8,
+      "count": 3456
+    }
+  },
+  {
+    "id": "xbox-series-x",
+    "name": "Xbox Series X",
+    "description": "Most powerful Xbox ever with 4K gaming and quick resume feature. Includes Xbox Game Pass for instant access to hundreds of games.",
+    "price": 499.99,
+    "image": "https://picsum.photos/400/300?random=26",
+    "categoryId": "gaming",
+    "inStock": true,
+    "rating": {
+      "average": 4.7,
+      "count": 2789
+    }
+  },
+  {
+    "id": "nintendo-switch-oled",
+    "name": "Nintendo Switch OLED",
+    "description": "Hybrid gaming console with vibrant OLED screen and enhanced audio. Play at home or on the go with exclusive Nintendo games.",
+    "price": 349.99,
+    "image": "https://picsum.photos/400/300?random=27",
+    "categoryId": "gaming",
+    "inStock": true,
+    "rating": {
+      "average": 4.6,
+      "count": 4123
+    }
+  },
+  {
+    "id": "steam-deck",
+    "name": "Steam Deck",
+    "description": "Portable gaming PC that runs your Steam library. Features custom AMD APU and SteamOS for seamless PC gaming anywhere.",
+    "price": 649.99,
+    "image": "https://picsum.photos/400/300?random=28",
+    "categoryId": "gaming",
+    "inStock": true,
+    "rating": {
+      "average": 4.4,
+      "count": 1567
+    }
+  },
+  {
+    "id": "sonos-arc",
+    "name": "Sonos Arc",
+    "description": "Premium smart soundbar with Dolby Atmos surround sound. Features voice control and seamless integration with streaming services.",
+    "price": 899.99,
+    "image": "https://picsum.photos/400/300?random=29",
+    "categoryId": "speakers",
+    "inStock": true,
+    "rating": {
+      "average": 4.7,
+      "count": 1234
+    }
+  },
+  {
+    "id": "bose-soundlink",
+    "name": "Bose SoundLink Max",
+    "description": "Portable Bluetooth speaker with powerful bass and 20-hour battery life. Waterproof design perfect for outdoor adventures.",
+    "price": 399.99,
+    "image": "https://picsum.photos/400/300?random=30",
+    "categoryId": "speakers",
+    "inStock": true,
+    "rating": {
+      "average": 4.5,
+      "count": 876
+    }
+  },
+  {
+    "id": "jbl-charge-5",
+    "name": "JBL Charge 5",
+    "description": "Powerful portable speaker with built-in power bank functionality. Features IP67 waterproof rating and bold JBL signature sound.",
+    "price": 179.99,
+    "image": "https://picsum.photos/400/300?random=31",
+    "categoryId": "speakers",
+    "inStock": false,
+    "rating": {
+      "average": 4.4,
+      "count": 2345
+    }
+  },
+  {
+    "id": "marshall-woburn-3",
+    "name": "Marshall Woburn III",
+    "description": "Iconic home speaker with legendary Marshall sound and vintage design. Features Bluetooth connectivity and classic rock aesthetics.",
+    "price": 549.99,
+    "image": "https://picsum.photos/400/300?random=32",
+    "categoryId": "speakers",
+    "inStock": true,
+    "rating": {
+      "average": 4.6,
+      "count": 456
+    }
+  },
+  {
+    "id": "magsafe-charger",
+    "name": "Apple MagSafe Charger",
+    "description": "Wireless charging pad with magnetic alignment for iPhone. Delivers fast and efficient charging with perfect placement every time.",
+    "price": 39.99,
+    "image": "https://picsum.photos/400/300?random=33",
+    "categoryId": "accessories",
+    "inStock": true,
+    "rating": {
+      "average": 4.3,
+      "count": 3456
+    }
+  },
+  {
+    "id": "anker-powerbank",
+    "name": "Anker PowerCore 20K",
+    "description": "High-capacity portable charger with multiple ports and fast charging technology. Keeps your devices powered throughout the day.",
+    "price": 79.99,
+    "image": "https://picsum.photos/400/300?random=34",
+    "categoryId": "accessories",
+    "inStock": true,
+    "rating": {
+      "average": 4.7,
+      "count": 2789
+    }
+  },
+  {
+    "id": "logitech-mx-master",
+    "name": "Logitech MX Master 3S",
+    "description": "Advanced wireless mouse with precision scrolling and ergonomic design. Features customizable buttons and multi-device connectivity.",
+    "price": 99.99,
+    "image": "https://picsum.photos/400/300?random=35",
+    "categoryId": "accessories",
+    "inStock": false,
+    "rating": {
+      "average": 4.8,
+      "count": 1567
+    }
+  },
+  {
+    "id": "usb-c-hub",
+    "name": "HyperDrive USB-C Hub",
+    "description": "Multi-port hub with HDMI, USB-A, and SD card slots. Essential accessory for modern laptops with limited connectivity options.",
+    "price": 149.99,
+    "image": "https://picsum.photos/400/300?random=36",
+    "categoryId": "accessories",
+    "inStock": true,
+    "rating": {
+      "average": 4.4,
+      "count": 892
+    }
+  }
+]
