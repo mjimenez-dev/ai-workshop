@@ -14,16 +14,75 @@ import {
 
 // Layout Components
 export const MainContainer = styled(Container)(({ theme }) => ({
-  maxWidth: '1200px', // Container max width from guidelines
-  paddingLeft: theme.spacing(4), // 16px mobile
-  paddingRight: theme.spacing(4),
-  [theme.breakpoints.up('md')]: {
-    paddingLeft: theme.spacing(6), // 24px tablet
-    paddingRight: theme.spacing(6),
+  maxWidth: '1200px', // Container max wiexport const RatingContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+}));
+
+// Product Detail Specific Components
+export const ProductImageGallery = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+}));
+
+export const ThumbnailContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(1),
+  overflowX: 'auto',
+  paddingBottom: theme.spacing(1),
+  
+  '&::-webkit-scrollbar': {
+    height: 4,
   },
-  [theme.breakpoints.up('lg')]: {
-    paddingLeft: theme.spacing(8), // 32px desktop
-    paddingRight: theme.spacing(8),
+  
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: theme.palette.grey[200],
+    borderRadius: 2,
+  },
+  
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: 2,
+  },
+}));
+
+export const ProductDetailContainer = styled(Box)(({ theme }) => ({
+  position: 'sticky',
+  top: theme.spacing(3),
+  height: 'fit-content',
+}));
+
+export const QuantitySelector = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  padding: theme.spacing(1),
+  border: `1px solid ${theme.palette.grey[300]}`,
+  borderRadius: theme.spacing(1),
+  width: 'fit-content',
+}));
+
+export const FeatureList = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+  padding: theme.spacing(3),
+  backgroundColor: theme.palette.grey[50],
+  borderRadius: theme.spacing(1),
+  border: `1px solid ${theme.palette.grey[200]}`,
+}));
+
+export const FeatureItem = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  
+  '& .MuiSvgIcon-root': {
+    color: theme.palette.primary.main,
+    fontSize: '1.25rem',
   },
 }));
 

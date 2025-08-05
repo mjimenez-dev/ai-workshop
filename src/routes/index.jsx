@@ -28,6 +28,7 @@ import {
 } from '../components/StyledComponents';
 import { Star, TrendingUp } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
+import { Link } from '@tanstack/react-router';
 
 const HomeComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -175,7 +176,11 @@ const HomeComponent = () => {
                   style={{ transitionDelay: `${index * 50}ms` }}
                 >
                   <ProductCard
+                    component={Link}
+                    to={`/product/${product.id}`}
                     sx={{
+                      textDecoration: 'none',
+                      color: 'inherit',
                       transition: 'all 0.3s ease-in-out',
                       '&:hover': {
                         transform: 'translateY(-8px)',
