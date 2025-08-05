@@ -1,122 +1,227 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React from 'react';
-import { Container, Typography, Grid, Card, CardContent, Button, styled } from '@mui/material';
-import { Dashboard, People, Assignment } from '@mui/icons-material';
-import { Link } from '@tanstack/react-router';
+import React, { useState } from 'react';
+import { 
+  Container, 
+  Typography, 
+  Grid, 
+  Box,
+  CircularProgress,
+  Alert
+} from '@mui/material';
+import { 
+  MainContainer,
+  PageSection,
+  CategorySidebar,
+  CategoryButton,
+  ProductGrid,
+  ProductCard,
+  ProductImageContainer,
+  ProductContent,
+  PriceContainer,
+  PrimaryPrice,
+  OriginalPrice,
+  PrimaryActionButton,
+  StockStatus,
+  RatingContainer
+} from '../components/StyledComponents';
+import { Star } from '@mui/icons-material';
+import { useProducts } from '../hooks/useProducts';
 
-// Styled Components
-const HeroSection = styled('div')(({ theme }) => ({
-  textAlign: 'center',
-  marginBottom: theme.spacing(4),
-}));
+const HomeComponent = () => {
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const { 
+    products, 
+    categories, 
+    loading, 
+    error, 
+    getProductsByCategory,
+    getCategoryName 
+  } = useProducts();
 
-const IconWrapper = styled('div')(({ theme }) => ({
-  fontSize: 48,
-  color: theme.palette.primary.main,
-  marginBottom: theme.spacing(2),
-}));
+  // Get filtered products based on selected category
+  const filteredProducts = getProductsByCategory(selectedCategory);
 
-const StyledCard = styled(Card)(() => ({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-}));
+  if (loading) {
+    return (
+      <MainContainer sx={{ py: 8, textAlign: 'center' }}>
+        <CircularProgress size={60} />
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Loading products...
+        </Typography>
+      </MainContainer>
+    );
+  }
 
-const StyledCardContent = styled(CardContent)(() => ({
-  flexGrow: 1,
-  textAlign: 'center',
-}));
+  if (error) {
+    return (
+      <MainContainer sx={{ py: 8 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      </MainContainer>
+    );
+  }
 
-const ActionButton = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
-
-const IndexComponent = () => {
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <HeroSection>
-        <Typography variant="h2" component="h1" gutterBottom>
-          Welcome to AI Workshop
-        </Typography>
-        <Typography variant="h5" color="text.secondary" paragraph>
-          A modern React application built with Vite, MUI, and TanStack Router
-        </Typography>
-      </HeroSection>
+    <MainContainer maxWidth="xl">
+      {/* Hero Section */}
+      <PageSection>
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Typography variant="h1" component="h1" gutterBottom>
+            Explore Our Products
+          </Typography>
+          <Typography variant="h4" color="text.secondary" sx={{ fontWeight: 400 }}>
+            Discover the latest tech products with unbeatable prices
+          </Typography>
+        </Box>
+      </PageSection>
 
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={4}>
-          <StyledCard>
-            <StyledCardContent>
-              <IconWrapper>
-                <Dashboard />
-              </IconWrapper>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Dashboard
-              </Typography>
-              <Typography color="text.secondary" paragraph>
-                View application metrics and overview
-              </Typography>
-              <ActionButton 
-                component={Link} 
-                to="/dashboard" 
-                variant="contained"
-              >
-                Go to Dashboard
-              </ActionButton>
-            </StyledCardContent>
-          </StyledCard>
+      {/* Main Content Grid */}
+      <Grid container spacing={3}>
+        {/* Category Sidebar */}
+        <Grid item xs={12} md={3}>
+          <CategorySidebar>
+            <Typography variant="h3" gutterBottom>
+              Categories
+            </Typography>
+            
+            {/* All Products Button */}
+            <CategoryButton
+              active={selectedCategory === 'all'}
+              onClick={() => setSelectedCategory('all')}
+            >
+              All Products ({products.length})
+            </CategoryButton>
+            
+            {/* Category Buttons */}
+            {categories.map((category) => {
+              const categoryProducts = getProductsByCategory(category.id);
+              return (
+                <CategoryButton
+                  key={category.id}
+                  active={selectedCategory === category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                >
+                  {category.name} ({categoryProducts.length})
+                </CategoryButton>
+              );
+            })}
+          </CategorySidebar>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <StyledCard>
-            <StyledCardContent>
-              <IconWrapper>
-                <People />
-              </IconWrapper>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Users
-              </Typography>
-              <Typography color="text.secondary" paragraph>
-                Manage users and their profiles
-              </Typography>
-              <ActionButton 
-                component={Link} 
-                to="/users" 
-                variant="contained"
-              >
-                View Users
-              </ActionButton>
-            </StyledCardContent>
-          </StyledCard>
-        </Grid>
+        {/* Product Grid */}
+        <Grid item xs={12} md={9}>
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="h2">
+              {selectedCategory === 'all' 
+                ? 'All Products' 
+                : getCategoryName(selectedCategory)
+              }
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              {filteredProducts.length} products found
+            </Typography>
+          </Box>
 
-        <Grid item xs={12} md={4}>
-          <StyledCard>
-            <StyledCardContent>
-              <IconWrapper>
-                <Assignment />
-              </IconWrapper>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Projects
+          <ProductGrid container spacing={3}>
+            {filteredProducts.map((product) => (
+              <Grid item xs={12} sm={6} lg={4} key={product.id}>
+                <ProductCard>
+                  {/* Product Image */}
+                  <ProductImageContainer>
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                      }}
+                    />
+                  </ProductImageContainer>
+
+                  {/* Product Content */}
+                  <ProductContent>
+                    <Typography variant="h3" gutterBottom>
+                      {product.name}
+                    </Typography>
+                    
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      {product.description.substring(0, 100)}...
+                    </Typography>
+
+                    {/* Rating */}
+                    <RatingContainer>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            sx={{
+                              fontSize: 16,
+                              color: i < Math.floor(product.rating.average) 
+                                ? 'warning.main' 
+                                : 'grey.300'
+                            }}
+                          />
+                        ))}
+                      </Box>
+                      <Typography variant="caption">
+                        {product.rating.average} ({product.rating.count})
+                      </Typography>
+                    </RatingContainer>
+
+                    {/* Price */}
+                    <PriceContainer>
+                      <PrimaryPrice variant="h3">
+                        ${product.price}
+                      </PrimaryPrice>
+                      {product.originalPrice && product.originalPrice > product.price && (
+                        <OriginalPrice variant="body2">
+                          ${product.originalPrice}
+                        </OriginalPrice>
+                      )}
+                    </PriceContainer>
+
+                    {/* Stock Status */}
+                    <Box sx={{ mt: 2, mb: 2 }}>
+                      <StockStatus 
+                        inStock={product.inStock}
+                        label={product.inStock ? 'In Stock' : 'Out of Stock'}
+                        size="small"
+                      />
+                    </Box>
+
+                    {/* Add to Cart Button */}
+                    <PrimaryActionButton
+                      fullWidth
+                      variant="contained"
+                      disabled={!product.inStock}
+                      sx={{ mt: 'auto' }}
+                    >
+                      {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                    </PrimaryActionButton>
+                  </ProductContent>
+                </ProductCard>
+              </Grid>
+            ))}
+          </ProductGrid>
+
+          {/* No Products Message */}
+          {filteredProducts.length === 0 && (
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Typography variant="h3" gutterBottom>
+                No products found
               </Typography>
-              <Typography color="text.secondary" paragraph>
-                Track and manage project tasks
+              <Typography variant="body1" color="text.secondary">
+                Try selecting a different category or check back later.
               </Typography>
-              <ActionButton 
-                component={Link} 
-                to="/projects" 
-                variant="contained"
-              >
-                View Projects
-              </ActionButton>
-            </StyledCardContent>
-          </StyledCard>
+            </Box>
+          )}
         </Grid>
       </Grid>
-    </Container>
+    </MainContainer>
   );
 };
 
 export const Route = createFileRoute('/')({
-  component: IndexComponent,
+  component: HomeComponent,
 });
