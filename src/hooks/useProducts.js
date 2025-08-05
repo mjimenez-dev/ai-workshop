@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 // Custom hook for managing product data and operations
 // Reference: ai-docs/todo.md Step 3 and ai-docs/project_plan.md Step 3
@@ -7,32 +7,58 @@ export const useProducts = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  // Load products and categories data
-  useEffect(() => {
-    const loadData = async () => {
-      try {
+  const maxRetries = 3;
+  const retryDelay = 1000;
+
+  // Load products and categories data with retry logic
+  const loadData = useCallback(async (isRetry = false) => {
+    try {
+      if (!isRetry) {
         setLoading(true);
-        setError(null);
-
-        // Load products and categories in parallel
-        const [productsResponse, categoriesResponse] = await Promise.all([
-          import('../data/products.json'),
-          import('../data/categories.json')
-        ]);
-
-        setProducts(productsResponse.default || []);
-        setCategories(categoriesResponse.default || []);
-      } catch (err) {
-        console.error('Error loading product data:', err);
-        setError('Failed to load product data. Please try again.');
-      } finally {
-        setLoading(false);
       }
-    };
+      setError(null);
 
+      // Simulate network delay for better UX demonstration
+      await new Promise(resolve => setTimeout(resolve, isRetry ? retryDelay : 500));
+
+      // Load products and categories in parallel
+      const [productsResponse, categoriesResponse] = await Promise.all([
+        import('../data/products.json'),
+        import('../data/categories.json')
+      ]);
+
+      setProducts(productsResponse.default || []);
+      setCategories(categoriesResponse.default || []);
+      setRetryCount(0); // Reset on success
+    } catch (err) {
+      console.error('Error loading product data:', err);
+      const errorMessage = `Failed to load product data: ${err.message || 'Unknown error'}`;
+      setError(errorMessage);
+      
+      // Auto-retry with exponential backoff
+      if (retryCount < maxRetries) {
+        console.log(`Retrying... Attempt ${retryCount + 1}/${maxRetries}`);
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+          loadData(true);
+        }, retryDelay * (retryCount + 1));
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [retryCount]);
+
+  // Manual retry function
+  const retry = useCallback(() => {
+    setRetryCount(0);
     loadData();
-  }, []);
+  }, [loadData]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   // Get all products
   const getAllProducts = useMemo(() => {
@@ -122,6 +148,7 @@ export const useProducts = () => {
     // Loading states
     loading,
     error,
+    retryCount,
     
     // Core functions (matching todo.md requirements)
     getAllProducts: () => getAllProducts,
@@ -138,6 +165,7 @@ export const useProducts = () => {
     // Utility functions
     hasProducts: getAllProducts.length > 0,
     hasCategories: categories.length > 0,
+    retry, // Manual retry function
   };
 };
 

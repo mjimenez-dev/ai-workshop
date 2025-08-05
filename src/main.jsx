@@ -5,6 +5,12 @@ import { CssBaseline } from '@mui/material'
 import './index.css'
 import { router, RouterProvider } from './router.js'
 import theme from './theme/index.js'
+import performanceTest from './utils/performance.js'
+
+// Start performance monitoring in development
+if (import.meta.env.DEV) {
+  performanceTest.runAllTests();
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

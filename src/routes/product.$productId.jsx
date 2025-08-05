@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Typography, 
   Grid, 
@@ -40,6 +40,7 @@ import {
 } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
 import { Link as RouterLink, useNavigate } from '@tanstack/react-router';
+import { ProductDetailSkeleton } from '../components/SkeletonLoaders';
 
 const ProductDetailComponent = () => {
   const { productId } = Route.useParams();
@@ -56,7 +57,9 @@ const ProductDetailComponent = () => {
     getRelatedProducts, 
     getCategoryName,
     loading, 
-    error 
+    error,
+    retry,
+    retryCount
   } = useProducts();
 
   // Get product and related products
@@ -66,13 +69,40 @@ const ProductDetailComponent = () => {
     return getRelatedProducts(product.id).slice(0, 4); // Limit to 4 for MVP
   }, [product, getRelatedProducts]);
 
+  // Auto-redirect for 404 products after a delay
+  useEffect(() => {
+    if (!loading && !error && !product) {
+      const timer = setTimeout(() => {
+        navigate({ to: '/' });
+      }, 3000); // 3 second delay
+      
+      return () => clearTimeout(timer);
+    }
+  }, [loading, error, product, navigate]);
+
   if (loading) {
     return (
-      <MainContainer sx={{ py: 8, textAlign: 'center' }}>
-        <CircularProgress size={60} />
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          Loading product details...
-        </Typography>
+      <MainContainer maxWidth="xl">
+        {/* Breadcrumbs Skeleton */}
+        <Box sx={{ py: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Chip label="Loading..." size="small" variant="outlined" />
+          </Box>
+        </Box>
+
+        {/* Back Button Skeleton */}
+        <Box sx={{ mb: 3 }}>
+          <Button 
+            disabled
+            startIcon={<ArrowBack />}
+            sx={{ color: 'text.secondary' }}
+          >
+            Back to Products
+          </Button>
+        </Box>
+
+        {/* Product Detail Skeleton */}
+        <ProductDetailSkeleton />
       </MainContainer>
     );
   }
@@ -80,16 +110,46 @@ const ProductDetailComponent = () => {
   if (error) {
     return (
       <MainContainer sx={{ py: 8 }}>
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert 
+          severity="error" 
+          sx={{ mb: 2 }}
+          action={
+            <Button 
+              color="inherit" 
+              size="small" 
+              onClick={retry}
+              disabled={retryCount > 0}
+            >
+              {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Retry'}
+            </Button>
+          }
+        >
           {error}
         </Alert>
-        <Button 
-          onClick={() => navigate({ to: '/' })}
-          startIcon={<ArrowBack />}
-          sx={{ mt: 2 }}
-        >
-          Back to Products
-        </Button>
+        <Box sx={{ textAlign: 'center', mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Unable to load product details
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Please check your internet connection and try again.
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+            <PrimaryActionButton 
+              onClick={retry}
+              disabled={retryCount > 0}
+              startIcon={retryCount > 0 ? <CircularProgress size={16} /> : null}
+            >
+              {retryCount > 0 ? 'Retrying...' : 'Try Again'}
+            </PrimaryActionButton>
+            <Button 
+              onClick={() => navigate({ to: '/' })}
+              startIcon={<ArrowBack />}
+              variant="outlined"
+            >
+              Back to Products
+            </Button>
+          </Box>
+        </Box>
       </MainContainer>
     );
   }
@@ -97,18 +157,25 @@ const ProductDetailComponent = () => {
   if (!product) {
     return (
       <MainContainer sx={{ py: 8, textAlign: 'center' }}>
-        <Alert severity="warning" sx={{ mb: 4 }}>
-          Product not found. Redirecting to home page...
-        </Alert>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          The product you're looking for doesn't exist or may have been removed.
-        </Typography>
-        <PrimaryActionButton 
-          onClick={() => navigate({ to: '/' })}
-          startIcon={<ArrowBack />}
-        >
-          Browse All Products
-        </PrimaryActionButton>
+        <Fade in timeout={600}>
+          <Box>
+            <Alert severity="warning" sx={{ mb: 4 }}>
+              Product not found. Redirecting to home page in 3 seconds...
+            </Alert>
+            <Typography variant="h6" gutterBottom sx={{ color: 'text.secondary' }}>
+              The product you're looking for doesn't exist or may have been removed.
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              You will be automatically redirected to browse all products.
+            </Typography>
+            <PrimaryActionButton 
+              onClick={() => navigate({ to: '/' })}
+              startIcon={<ArrowBack />}
+            >
+              Browse All Products
+            </PrimaryActionButton>
+          </Box>
+        </Fade>
       </MainContainer>
     );
   }
@@ -197,10 +264,20 @@ const ProductDetailComponent = () => {
       </Box>
 
       {/* Main Product Content */}
-      <Grid container spacing={6}>
+      <Grid container spacing={6} sx={{
+        // Mobile responsive spacing
+        [theme => theme.breakpoints.down('md')]: {
+          spacing: 4,
+        }
+      }}>
         {/* Product Images */}
         <Grid item xs={12} md={6}>
-          <Box>
+          <Box sx={{
+            // Mobile optimizations
+            [theme => theme.breakpoints.down('md')]: {
+              marginBottom: 4,
+            }
+          }}>
             {/* Main Image */}
             <ProductImageContainer 
               sx={{ 
@@ -212,9 +289,15 @@ const ProductDetailComponent = () => {
             >
               <img 
                 src={productImages[selectedImageIndex]} 
-                alt={product.name}
+                alt={`${product.name} - Product Image ${selectedImageIndex + 1}`}
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/500x500?text=Product+Image';
+                }}
+                style={{
+                  transition: 'opacity 0.3s ease',
+                }}
+                onLoad={(e) => {
+                  e.target.style.opacity = '1';
                 }}
               />
             </ProductImageContainer>
@@ -444,7 +527,18 @@ const ProductDetailComponent = () => {
             </Box>
 
             {/* Action Buttons */}
-            <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2, 
+              mb: 4,
+              // Mobile responsive layout
+              [theme => theme.breakpoints.down('sm')]: {
+                flexDirection: 'column',
+                '& > button': {
+                  minHeight: '52px', // Larger touch targets on mobile
+                }
+              }
+            }}>
               <PrimaryActionButton
                 startIcon={isAddedToCart ? '✓' : <ShoppingCart />}
                 disabled={!product.inStock}

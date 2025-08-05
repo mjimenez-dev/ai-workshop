@@ -29,6 +29,7 @@ import {
 import { Star, TrendingUp } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
 import { Link } from '@tanstack/react-router';
+import { ProductGridSkeleton, CategorySidebarSkeleton } from '../components/SkeletonLoaders';
 
 const HomeComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -39,7 +40,9 @@ const HomeComponent = () => {
     loading, 
     error, 
     getProductsByCategory,
-    getCategoryName 
+    getCategoryName,
+    retry,
+    retryCount
   } = useProducts();
 
   // Optimized category selection with smooth transitions
@@ -68,11 +71,37 @@ const HomeComponent = () => {
 
   if (loading) {
     return (
-      <MainContainer sx={{ py: 8, textAlign: 'center' }}>
-        <CircularProgress size={60} />
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          Loading products...
-        </Typography>
+      <MainContainer maxWidth="xl">
+        {/* Hero Section */}
+        <PageSection>
+          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Typography variant="h1" component="h1" gutterBottom>
+              Explore Our Products
+            </Typography>
+            <Typography variant="h4" color="text.secondary" sx={{ fontWeight: 400 }}>
+              Discover the latest tech products with unbeatable prices
+            </Typography>
+          </Box>
+        </PageSection>
+
+        {/* Loading Content Grid */}
+        <Grid container spacing={3}>
+          {/* Category Sidebar Skeleton */}
+          <Grid item xs={12} md={3}>
+            <CategorySidebarSkeleton />
+          </Grid>
+
+          {/* Product Grid Skeleton */}
+          <Grid item xs={12} md={9}>
+            <Box sx={{ mb: 3 }}>
+              <CircularProgress size={20} sx={{ mr: 2 }} />
+              <Typography variant="h2" component="span">
+                Loading products...
+              </Typography>
+            </Box>
+            <ProductGridSkeleton count={6} />
+          </Grid>
+        </Grid>
       </MainContainer>
     );
   }
@@ -80,9 +109,37 @@ const HomeComponent = () => {
   if (error) {
     return (
       <MainContainer sx={{ py: 8 }}>
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert 
+          severity="error" 
+          sx={{ mb: 2 }}
+          action={
+            <Button 
+              color="inherit" 
+              size="small" 
+              onClick={retry}
+              disabled={retryCount > 0}
+            >
+              {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Retry'}
+            </Button>
+          }
+        >
           {error}
         </Alert>
+        <Box sx={{ textAlign: 'center', mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Unable to load products
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Please check your internet connection and try again.
+          </Typography>
+          <PrimaryActionButton 
+            onClick={retry}
+            disabled={retryCount > 0}
+            startIcon={retryCount > 0 ? <CircularProgress size={16} /> : null}
+          >
+            {retryCount > 0 ? 'Retrying...' : 'Try Again'}
+          </PrimaryActionButton>
+        </Box>
       </MainContainer>
     );
   }
@@ -105,7 +162,15 @@ const HomeComponent = () => {
       <Grid container spacing={3}>
         {/* Category Sidebar */}
         <Grid item xs={12} md={3}>
-          <CategorySidebar>
+          <CategorySidebar sx={{
+            // Mobile-first responsive design
+            [theme => theme.breakpoints.down('md')]: {
+              borderRight: 'none',
+              borderBottom: `1px solid ${theme => theme.palette.grey[300]}`,
+              marginBottom: 3,
+              position: 'static',
+            }
+          }}>
             <Typography variant="h3" gutterBottom>
               Categories
             </Typography>
@@ -167,7 +232,12 @@ const HomeComponent = () => {
             </Typography>
           </Box>
 
-          <ProductGrid container spacing={3}>
+          <ProductGrid container spacing={3} sx={{
+            // Responsive spacing
+            [theme => theme.breakpoints.down('sm')]: {
+              spacing: 2,
+            }
+          }}>
             {filteredProducts.map((product, index) => (
               <Grid item xs={12} sm={6} lg={4} key={product.id}>
                 <Zoom 
@@ -182,6 +252,11 @@ const HomeComponent = () => {
                       textDecoration: 'none',
                       color: 'inherit',
                       transition: 'all 0.3s ease-in-out',
+                      // Enhanced mobile touch targets
+                      [theme => theme.breakpoints.down('md')]: {
+                        minHeight: '400px',
+                        padding: theme => theme.spacing(3),
+                      },
                       '&:hover': {
                         transform: 'translateY(-8px)',
                         boxShadow: (theme) => `0 12px 24px ${theme.palette.grey[400]}40`,
@@ -192,10 +267,16 @@ const HomeComponent = () => {
                     <ProductImageContainer>
                       <img 
                         src={product.image} 
-                        alt={product.name}
+                        alt={`${product.name} - ${getCategoryName(product.categoryId)}`}
                         loading="lazy"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                          e.target.src = 'https://via.placeholder.com/400x300?text=Product+Image';
+                        }}
+                        style={{
+                          transition: 'opacity 0.3s ease',
+                        }}
+                        onLoad={(e) => {
+                          e.target.style.opacity = '1';
                         }}
                       />
                       {/* Trending Badge for Popular Items */}
