@@ -8,7 +8,11 @@ import {
   CircularProgress,
   Alert,
   Fade,
-  Zoom
+  Zoom,
+  Chip,
+  IconButton,
+  TextField,
+  Button
 } from '@mui/material';
 import { 
   MainContainer,
@@ -146,15 +150,67 @@ const HomeComponent = () => {
 
   return (
     <MainContainer maxWidth="xl">
-      {/* Hero Section */}
+      {/* Enhanced Hero Section - Typical Figma E-commerce Pattern */}
       <PageSection>
-        <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Typography variant="h1" component="h1" gutterBottom>
-            Explore Our Products
-          </Typography>
-          <Typography variant="h4" color="text.secondary" sx={{ fontWeight: 400 }}>
-            Discover the latest tech products with unbeatable prices
-          </Typography>
+        <Box 
+          sx={{ 
+            background: 'linear-gradient(135deg, #DB444410 0%, #00FF6610 100%)',
+            borderRadius: 3,
+            p: 6,
+            mb: 6,
+            textAlign: 'center',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23DB444408" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
+              opacity: 0.3,
+              zIndex: 0,
+            }
+          }}
+        >
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <Typography variant="h1" component="h1" gutterBottom sx={{ 
+              background: 'linear-gradient(45deg, #DB4444, #000)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 2 
+            }}>
+              Explore Our Products
+            </Typography>
+            <Typography variant="h4" color="text.secondary" sx={{ 
+              fontWeight: 400,
+              mb: 4,
+              maxWidth: '600px',
+              mx: 'auto' 
+            }}>
+              Discover the latest tech products with unbeatable prices
+            </Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              gap: 2,
+              flexWrap: 'wrap',
+              '& .MuiChip-root': {
+                backgroundColor: 'primary.main',
+                color: 'white',
+                fontWeight: 600,
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                }
+              }
+            }}>
+              <Chip label="✨ New Arrivals" />
+              <Chip label="🔥 Hot Deals" />
+              <Chip label="📱 Latest Tech" />
+            </Box>
+          </Box>
         </Box>
       </PageSection>
 
@@ -163,6 +219,10 @@ const HomeComponent = () => {
         {/* Category Sidebar */}
         <Grid item xs={12} md={3}>
           <CategorySidebar sx={{
+            // Enhanced styling for better Figma match
+            background: 'linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%)',
+            borderRadius: 2,
+            p: 3,
             // Mobile-first responsive design
             [theme => theme.breakpoints.down('md')]: {
               borderRight: 'none',
@@ -171,9 +231,25 @@ const HomeComponent = () => {
               position: 'static',
             }
           }}>
-            <Typography variant="h3" gutterBottom>
-              Categories
-            </Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 1, 
+              mb: 3,
+              pb: 2,
+              borderBottom: '2px solid',
+              borderColor: 'primary.main'
+            }}>
+              <Box sx={{ 
+                width: 8, 
+                height: 8, 
+                backgroundColor: 'primary.main', 
+                borderRadius: '50%' 
+              }} />
+              <Typography variant="h3" sx={{ fontWeight: 700, color: 'text.primary' }}>
+                Categories
+              </Typography>
+            </Box>
             
             {/* All Products Button */}
             <CategoryButton
@@ -279,29 +355,78 @@ const HomeComponent = () => {
                           e.target.style.opacity = '1';
                         }}
                       />
-                      {/* Trending Badge for Popular Items */}
-                      {product.rating.average >= 4.5 && (
-                        <Box
+                      
+                      {/* Enhanced Badge System */}
+                      <Box sx={{ position: 'absolute', top: 8, left: 8, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        {/* Trending Badge for Popular Items */}
+                        {product.rating.average >= 4.5 && (
+                          <Box
+                            sx={{
+                              backgroundColor: 'success.main',
+                              color: 'white',
+                              borderRadius: 1,
+                              px: 1,
+                              py: 0.5,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 0.5,
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                            }}
+                          >
+                            <TrendingUp sx={{ fontSize: 14 }} />
+                            Popular
+                          </Box>
+                        )}
+                        
+                        {/* Discount Badge */}
+                        {product.originalPrice && product.originalPrice > product.price && (
+                          <Box
+                            sx={{
+                              backgroundColor: 'error.main',
+                              color: 'white',
+                              borderRadius: 1,
+                              px: 1,
+                              py: 0.5,
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                            }}
+                          >
+                            -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                          </Box>
+                        )}
+                      </Box>
+
+                      {/* Quick Action Overlay - Typical Figma Pattern */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 8,
+                          right: 8,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: 1,
+                          opacity: 0,
+                          transition: 'opacity 0.3s ease',
+                          '.MuiCard-root:hover &': {
+                            opacity: 1,
+                          }
+                        }}
+                      >
+                        <IconButton
+                          size="small"
                           sx={{
-                            position: 'absolute',
-                            top: 8,
-                            left: 8,
-                            backgroundColor: 'success.main',
-                            color: 'white',
-                            borderRadius: 1,
-                            px: 1,
-                            py: 0.5,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 0.5,
+                            backgroundColor: 'white',
+                            boxShadow: 1,
+                            '&:hover': {
+                              backgroundColor: 'primary.main',
+                              color: 'white',
+                            }
                           }}
                         >
-                          <TrendingUp sx={{ fontSize: 14 }} />
-                          <Typography variant="caption" sx={{ fontWeight: 600 }}>
-                            Popular
-                          </Typography>
-                        </Box>
-                      )}
+                          <Star sx={{ fontSize: 16 }} />
+                        </IconButton>
+                      </Box>
                     </ProductImageContainer>
 
                   {/* Product Content */}
@@ -414,8 +539,92 @@ const HomeComponent = () => {
               </Box>
             </Fade>
           )}
+
+          {/* Promotional Section - Typical Figma E-commerce Pattern */}
+          {filteredProducts.length > 0 && (
+            <Box sx={{ 
+              mt: 8, 
+              p: 4, 
+              background: 'linear-gradient(135deg, #DB444408 0%, #00FF6608 100%)',
+              borderRadius: 3,
+              border: '1px solid',
+              borderColor: 'grey.200',
+              textAlign: 'center'
+            }}>
+              <Typography variant="h3" gutterBottom sx={{ color: 'primary.main', fontWeight: 700 }}>
+                🎉 Special Offers
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                Don't miss out on our latest deals and exclusive products
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
+                <Chip 
+                  label="Free Shipping on $50+" 
+                  sx={{ backgroundColor: 'success.main', color: 'white', fontWeight: 600 }}
+                />
+                <Chip 
+                  label="30-Day Returns" 
+                  sx={{ backgroundColor: 'info.main', color: 'white', fontWeight: 600 }}
+                />
+                <Chip 
+                  label="24/7 Support" 
+                  sx={{ backgroundColor: 'warning.main', color: 'white', fontWeight: 600 }}
+                />
+              </Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
+
+      {/* Newsletter Section - Common Figma Pattern */}
+      <Box sx={{ 
+        mt: 12, 
+        p: 6, 
+        backgroundColor: 'grey.900', 
+        color: 'white',
+        borderRadius: 3,
+        textAlign: 'center'
+      }}>
+        <Typography variant="h2" gutterBottom sx={{ color: 'white', fontWeight: 700 }}>
+          Stay Updated
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 4, opacity: 0.9, maxWidth: '500px', mx: 'auto' }}>
+          Subscribe to our newsletter for the latest tech products, exclusive deals, and insider updates.
+        </Typography>
+        <Box sx={{ 
+          display: 'flex', 
+          gap: 2, 
+          maxWidth: '400px', 
+          mx: 'auto',
+          [theme => theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+          }
+        }}>
+          <TextField
+            fullWidth
+            placeholder="Enter your email"
+            variant="outlined"
+            size="small"
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'white',
+                '& fieldset': {
+                  borderColor: 'transparent',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'primary.main',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'primary.main',
+                },
+              },
+            }}
+          />
+          <PrimaryActionButton variant="contained" sx={{ whiteSpace: 'nowrap', px: 4 }}>
+            Subscribe
+          </PrimaryActionButton>
+        </Box>
+      </Box>
     </MainContainer>
   );
 };

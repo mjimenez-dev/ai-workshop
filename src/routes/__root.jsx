@@ -27,18 +27,34 @@ const RootComponent = () => {
       <StyledAppBar position="sticky">
         <Toolbar>
           <FlexBetween sx={{ width: '100%' }}>
-            {/* Logo */}
-            <Typography 
-              variant="h4" 
-              component="div" 
-              sx={{ 
-                fontWeight: 700, 
-                color: 'text.primary',
-                letterSpacing: -0.5 
-              }}
-            >
-              TechStore
-            </Typography>
+            {/* Logo with Enhanced Styling */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ 
+                width: 32, 
+                height: 32, 
+                backgroundColor: 'primary.main', 
+                borderRadius: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontWeight: 700,
+                fontSize: '1.2rem'
+              }}>
+                T
+              </Box>
+              <Typography 
+                variant="h4" 
+                component="div" 
+                sx={{ 
+                  fontWeight: 700, 
+                  color: 'text.primary',
+                  letterSpacing: -0.5 
+                }}
+              >
+                TechStore
+              </Typography>
+            </Box>
             
             {/* Search Bar */}
             <SearchContainer>
@@ -66,19 +82,41 @@ const RootComponent = () => {
               />
             </SearchContainer>
             
-            {/* Cart Icon */}
+            {/* Enhanced Cart Icon with Badge */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <IconButton 
-                sx={{ 
-                  color: 'text.primary',
-                  '&:hover': {
-                    color: 'primary.main',
-                    backgroundColor: 'transparent',
-                  }
-                }}
-              >
-                <ShoppingCart />
-              </IconButton>
+              <Box sx={{ position: 'relative' }}>
+                <IconButton 
+                  sx={{ 
+                    color: 'text.primary',
+                    '&:hover': {
+                      color: 'primary.main',
+                      backgroundColor: 'rgba(219, 68, 68, 0.04)',
+                    }
+                  }}
+                >
+                  <ShoppingCart />
+                </IconButton>
+                {/* Cart Badge */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 4,
+                    right: 4,
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    borderRadius: '50%',
+                    width: 18,
+                    height: 18,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.7rem',
+                    fontWeight: 600,
+                  }}
+                >
+                  3
+                </Box>
+              </Box>
             </Box>
           </FlexBetween>
         </Toolbar>
