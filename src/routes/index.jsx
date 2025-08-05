@@ -15,18 +15,12 @@ import {
   MainContainer,
   CategorySidebar,
   CategoryButton,
-  ProductGrid,
   ProductCard,
   ProductImageContainer,
   ProductContent,
-  PriceContainer,
-  PrimaryPrice,
-  OriginalPrice,
-  PrimaryActionButton,
-  StockStatus,
-  RatingContainer
+  PrimaryActionButton
 } from '../components/StyledComponents';
-import { Star, TrendingUp } from '@mui/icons-material';
+import { Star } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
 import { Link } from '@tanstack/react-router';
 import { ProductGridSkeleton, CategorySidebarSkeleton } from '../components/SkeletonLoaders.jsx';
@@ -35,12 +29,10 @@ const HomeComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { 
-    products, 
     categories, 
     loading, 
     error, 
     getProductsByCategory,
-    getCategoryName,
     retry,
     retryCount
   } = useProducts();
@@ -73,23 +65,31 @@ const HomeComponent = () => {
     return (
       <MainContainer maxWidth="xl">
         <Box sx={{ py: 3 }}>
-          <Typography variant="h1" gutterBottom>
+          <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
             Explore Our Products
           </Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={3}>
+          <Box sx={{ 
+            display: 'flex',
+            gap: 3,
+            alignItems: 'flex-start'
+          }}>
+            <Box sx={{
+              minWidth: '200px',
+              maxWidth: '220px',
+              flexShrink: 0
+            }}>
               <CategorySidebarSkeleton />
-            </Grid>
-            <Grid item xs={12} md={9}>
+            </Box>
+            <Box sx={{ flexGrow: 1 }}>
               <Box sx={{ mb: 3 }}>
                 <CircularProgress size={20} sx={{ mr: 2 }} />
-                <Typography variant="h2" component="span">
+                <Typography variant="h6" component="span">
                   Loading products...
                 </Typography>
               </Box>
               <ProductGridSkeleton count={6} />
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Box>
       </MainContainer>
     );
@@ -136,22 +136,37 @@ const HomeComponent = () => {
   return (
     <MainContainer maxWidth="xl">
       <Box sx={{ py: 3 }}>
-        {/* Page Title - Match Figma Layout */}
-        <Typography variant="h1" component="h1" sx={{ 
-          fontSize: '2.5rem',
-          fontWeight: 700,
-          color: 'text.primary',
-          mb: 4
+        {/* Main Content Flex Layout - Match Figma Layout */}
+        <Box sx={{ 
+          display: 'flex',
+          gap: 3,
+          minHeight: '100vh',
+          alignItems: 'flex-start'
         }}>
-          Explore Our Products
-        </Typography>
-
-        {/* Main Content Grid */}
-        <Grid container spacing={3}>
-          {/* Category Sidebar */}
-          <Grid item xs={12} md={3}>
-            <CategorySidebar>
-              <Typography variant="h3" gutterBottom>
+          {/* Category Sidebar - Clean Design */}
+          <Box sx={{
+            minWidth: '200px',
+            maxWidth: '220px',
+            flexShrink: 0
+          }}>
+            <CategorySidebar sx={{
+              backgroundColor: 'white',
+              border: '1px solid #E5E5E5',
+              borderRadius: 1,
+              p: 1.5,
+              height: 'fit-content',
+              position: 'sticky',
+              top: 20,
+              width: '100%',
+            }}>
+              <Typography variant="h6" sx={{ 
+                fontWeight: 600, 
+                mb: 1.5, 
+                color: 'text.primary',
+                fontSize: '0.95rem',
+                borderBottom: '1px solid #E5E5E5',
+                pb: 1
+              }}>
                 Categories
               </Typography>
               
@@ -159,16 +174,23 @@ const HomeComponent = () => {
               <CategoryButton
                 active={selectedCategory === 'all'}
                 onClick={() => handleCategoryChange('all')}
+                sx={{
+                  justifyContent: 'flex-start',
+                  textAlign: 'left',
+                  fontSize: '0.8rem',
+                  py: 0.6,
+                  px: 0.8,
+                  mb: 0.2,
+                  borderRadius: 0.5,
+                  color: selectedCategory === 'all' ? '#DB4444' : 'text.secondary',
+                  backgroundColor: selectedCategory === 'all' ? '#FFF5F5' : 'transparent',
+                  '&:hover': {
+                    backgroundColor: '#FFF5F5',
+                    color: '#DB4444'
+                  }
+                }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  <span>All Products</span>
-                  <Typography variant="caption" sx={{ 
-                    opacity: 0.8,
-                    fontWeight: selectedCategory === 'all' ? 600 : 400 
-                  }}>
-                    ({products.length})
-                  </Typography>
-                </Box>
+                All Products
               </CategoryButton>
               
               {/* Category Buttons */}
@@ -177,32 +199,43 @@ const HomeComponent = () => {
                   key={category.id}
                   active={selectedCategory === category.id}
                   onClick={() => handleCategoryChange(category.id)}
+                  sx={{
+                    justifyContent: 'flex-start',
+                    textAlign: 'left',
+                    fontSize: '0.8rem',
+                    py: 0.6,
+                    px: 0.8,
+                    mb: 0.2,
+                    borderRadius: 0.5,
+                    color: selectedCategory === category.id ? '#DB4444' : 'text.secondary',
+                    backgroundColor: selectedCategory === category.id ? '#FFF5F5' : 'transparent',
+                    '&:hover': {
+                      backgroundColor: '#FFF5F5',
+                      color: '#DB4444'
+                    }
+                  }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                    <span>{category.name}</span>
-                    <Typography variant="caption" sx={{ 
-                      opacity: 0.8,
-                      fontWeight: selectedCategory === category.id ? 600 : 400 
-                    }}>
-                      ({category.productCount})
-                    </Typography>
-                  </Box>
+                  {category.name}
                 </CategoryButton>
               ))}
             </CategorySidebar>
-          </Grid>
+          </Box>
 
-          {/* Product Grid */}
-          <Grid item xs={12} md={9}>
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="body1" color="text.secondary">
-                {filteredProducts.length} products found
-              </Typography>
-            </Box>
+          {/* Product Grid - Main Content */}
+          <Box sx={{ flexGrow: 1 }}>
+            {/* Page Title */}
+            <Typography variant="h4" component="h1" sx={{ 
+              fontWeight: 600,
+              color: 'text.primary',
+              mb: 3
+            }}>
+              Explore Our Products
+            </Typography>
 
-            <ProductGrid container spacing={3}>
+            {/* Product Grid - 3 columns like Figma */}
+            <Grid container spacing={2}>
               {filteredProducts.map((product, index) => (
-                <Grid item xs={12} sm={6} lg={4} key={product.id}>
+                <Grid item xs={12} sm={6} md={4} key={product.id}>
                   <Zoom 
                     in={!isTransitioning} 
                     timeout={300}
@@ -214,68 +247,80 @@ const HomeComponent = () => {
                       sx={{
                         textDecoration: 'none',
                         color: 'inherit',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
                         transition: 'all 0.3s ease-in-out',
+                        border: '1px solid #E5E5E5',
+                        borderRadius: 2,
+                        overflow: 'hidden',
+                        backgroundColor: 'white',
                         '&:hover': {
-                          transform: 'translateY(-8px)',
-                          boxShadow: (theme) => `0 12px 24px ${theme.palette.grey[400]}40`,
+                          transform: 'translateY(-4px)',
+                          boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                          borderColor: 'primary.main',
                         }
                       }}
                     >
                       {/* Product Image */}
-                      <ProductImageContainer>
+                      <ProductImageContainer sx={{ 
+                        position: 'relative',
+                        height: 180,
+                        overflow: 'hidden',
+                        backgroundColor: '#F9F9F9'
+                      }}>
                         <img 
                           src={product.image} 
-                          alt={`${product.name} - ${getCategoryName(product.categoryId)}`}
+                          alt={product.name}
                           loading="lazy"
                           onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/400x300?text=Product+Image';
+                            e.target.src = 'https://via.placeholder.com/300x200?text=Product+Image';
                           }}
                           style={{
-                            transition: 'opacity 0.3s ease',
-                          }}
-                          onLoad={(e) => {
-                            e.target.style.opacity = '1';
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            transition: 'transform 0.3s ease',
                           }}
                         />
                         
-                        {/* Badges */}
-                        {product.rating.average >= 4.5 && (
-                          <Box
-                            sx={{
-                              position: 'absolute',
-                              top: 8,
-                              left: 8,
-                              backgroundColor: 'success.main',
-                              color: 'white',
-                              borderRadius: 1,
-                              px: 1,
-                              py: 0.5,
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 0.5,
-                              fontSize: '0.75rem',
-                              fontWeight: 600,
-                            }}
-                          >
-                            <TrendingUp sx={{ fontSize: 14 }} />
-                            Popular
-                          </Box>
-                        )}
-                        
+                        {/* View Product Icon - Like Figma */}
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            backgroundColor: 'rgba(255,255,255,0.9)',
+                            borderRadius: '50%',
+                            width: 32,
+                            height: 32,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            opacity: 0,
+                            transition: 'opacity 0.3s ease',
+                            '.MuiCard-root:hover &': {
+                              opacity: 1,
+                            }
+                          }}
+                        >
+                          👁️
+                        </Box>
+
                         {/* Discount Badge */}
                         {product.originalPrice && product.originalPrice > product.price && (
                           <Box
                             sx={{
                               position: 'absolute',
                               top: 8,
-                              right: 8,
-                              backgroundColor: 'error.main',
+                              left: 8,
+                              backgroundColor: '#DB4444',
                               color: 'white',
-                              borderRadius: 1,
+                              borderRadius: 0.5,
                               px: 1,
                               py: 0.5,
                               fontSize: '0.75rem',
-                              fontWeight: 700,
+                              fontWeight: 600,
                             }}
                           >
                             -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
@@ -284,63 +329,63 @@ const HomeComponent = () => {
                       </ProductImageContainer>
 
                       {/* Product Content */}
-                      <ProductContent className="product-content">
-                        <Typography variant="h3" gutterBottom sx={{
-                          transition: 'color 0.2s ease-in-out',
-                          fontWeight: 600,
+                      <ProductContent sx={{ 
+                        p: 1.5, 
+                        flexGrow: 1, 
+                        display: 'flex', 
+                        flexDirection: 'column',
+                        gap: 0.8
+                      }}>
+                        <Typography variant="h6" sx={{
+                          fontWeight: 500,
+                          fontSize: '0.9rem',
                           lineHeight: 1.3,
-                          height: '2.6em',
+                          color: 'text.primary',
                           overflow: 'hidden',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}>
                           {product.name}
                         </Typography>
-                        
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                          {product.description.substring(0, 100)}...
-                        </Typography>
+
+                        {/* Price */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 'auto' }}>
+                          <Typography variant="h6" sx={{
+                            color: '#DB4444',
+                            fontWeight: 600,
+                            fontSize: '0.95rem'
+                          }}>
+                            ${product.price}
+                          </Typography>
+                          {product.originalPrice && product.originalPrice > product.price && (
+                            <Typography variant="body2" sx={{
+                              textDecoration: 'line-through',
+                              color: 'text.secondary',
+                              fontSize: '0.8rem'
+                            }}>
+                              ${product.originalPrice}
+                            </Typography>
+                          )}
+                        </Box>
 
                         {/* Rating */}
-                        <RatingContainer>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 sx={{
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: i < Math.floor(product.rating.average) 
-                                    ? 'warning.main' 
-                                    : 'grey.300'
+                                    ? '#FFAD33' 
+                                    : '#E5E5E5'
                                 }}
                               />
                             ))}
                           </Box>
-                          <Typography variant="caption">
-                            {product.rating.average} ({product.rating.count})
+                          <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
+                            ({product.rating.count})
                           </Typography>
-                        </RatingContainer>
-
-                        {/* Price */}
-                        <PriceContainer>
-                          <PrimaryPrice variant="h3">
-                            ${product.price}
-                          </PrimaryPrice>
-                          {product.originalPrice && product.originalPrice > product.price && (
-                            <OriginalPrice variant="body2">
-                              ${product.originalPrice}
-                            </OriginalPrice>
-                          )}
-                        </PriceContainer>
-
-                        {/* Stock Status */}
-                        <Box sx={{ mt: 2, mb: 2 }}>
-                          <StockStatus 
-                            inStock={product.inStock}
-                            label={product.inStock ? 'In Stock' : 'Out of Stock'}
-                            size="small"
-                          />
                         </Box>
 
                         {/* Add to Cart Button */}
@@ -349,21 +394,58 @@ const HomeComponent = () => {
                           variant="contained"
                           disabled={!product.inStock}
                           sx={{ 
-                            mt: 'auto',
-                            transition: 'all 0.2s ease-in-out',
-                            '&:hover:not(:disabled)': {
-                              transform: 'scale(1.02)',
+                            mt: 1.5,
+                            backgroundColor: '#DB4444',
+                            color: 'white',
+                            py: 0.8,
+                            fontSize: '0.8rem',
+                            fontWeight: 500,
+                            textTransform: 'none',
+                            borderRadius: 1,
+                            '&:hover': {
+                              backgroundColor: '#B73E3E',
+                            },
+                            '&:disabled': {
+                              backgroundColor: '#E5E5E5',
+                              color: '#999',
                             }
                           }}
                         >
-                          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                          {product.inStock ? 'Add To Cart' : 'Out of Stock'}
                         </PrimaryActionButton>
                       </ProductContent>
                     </ProductCard>
                   </Zoom>
                 </Grid>
               ))}
-            </ProductGrid>
+            </Grid>
+
+            {/* View All Products Button - Like Figma */}
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              mt: 4, 
+              mb: 2 
+            }}>
+              <PrimaryActionButton
+                variant="contained"
+                sx={{
+                  backgroundColor: '#DB4444',
+                  color: 'white',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  borderRadius: 1,
+                  '&:hover': {
+                    backgroundColor: '#B73E3E',
+                  }
+                }}
+              >
+                View All Products
+              </PrimaryActionButton>
+            </Box>
 
             {/* No Products Message */}
             {filteredProducts.length === 0 && !isTransitioning && (
@@ -393,8 +475,8 @@ const HomeComponent = () => {
                 </Box>
               </Fade>
             )}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
     </MainContainer>
   );
