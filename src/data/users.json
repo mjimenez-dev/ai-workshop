@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "Frontend Developer",
+    "department": "Engineering",
+    "avatar": "https://ui-avatars.com/api/?name=John+Doe&background=1976d2&color=ffffff"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "role": "UX Designer",
+    "department": "Design",
+    "avatar": "https://ui-avatars.com/api/?name=Jane+Smith&background=388e3c&color=ffffff"
+  },
+  {
+    "id": 3,
+    "name": "Mike Johnson",
+    "email": "mike.johnson@example.com",
+    "role": "Product Manager",
+    "department": "Product",
+    "avatar": "https://ui-avatars.com/api/?name=Mike+Johnson&background=f57c00&color=ffffff"
+  },
+  {
+    "id": 4,
+    "name": "Sarah Wilson",
+    "email": "sarah.wilson@example.com",
+    "role": "Backend Developer",
+    "department": "Engineering",
+    "avatar": "https://ui-avatars.com/api/?name=Sarah+Wilson&background=7b1fa2&color=ffffff"
+  },
+  {
+    "id": 5,
+    "name": "David Brown",
+    "email": "david.brown@example.com",
+    "role": "DevOps Engineer",
+    "department": "Infrastructure",
+    "avatar": "https://ui-avatars.com/api/?name=David+Brown&background=c62828&color=ffffff"
+  }
+]
