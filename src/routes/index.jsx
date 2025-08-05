@@ -1,12 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { 
   Container, 
   Typography, 
   Grid, 
   Box,
   CircularProgress,
-  Alert
+  Alert,
+  Fade,
+  Zoom
 } from '@mui/material';
 import { 
   MainContainer,
@@ -24,11 +26,12 @@ import {
   StockStatus,
   RatingContainer
 } from '../components/StyledComponents';
-import { Star } from '@mui/icons-material';
+import { Star, TrendingUp } from '@mui/icons-material';
 import { useProducts } from '../hooks/useProducts';
 
 const HomeComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const { 
     products, 
     categories, 
@@ -38,8 +41,29 @@ const HomeComponent = () => {
     getCategoryName 
   } = useProducts();
 
-  // Get filtered products based on selected category
-  const filteredProducts = getProductsByCategory(selectedCategory);
+  // Optimized category selection with smooth transitions
+  const handleCategoryChange = useCallback((categoryId) => {
+    if (categoryId === selectedCategory) return;
+    
+    setIsTransitioning(true);
+    setSelectedCategory(categoryId);
+    
+    // Quick transition for smooth UX
+    setTimeout(() => setIsTransitioning(false), 150);
+  }, [selectedCategory]);
+
+  // Memoized filtered products for performance
+  const filteredProducts = useMemo(() => {
+    return getProductsByCategory(selectedCategory);
+  }, [selectedCategory, getProductsByCategory]);
+
+  // Memoized category data with product counts
+  const categoryData = useMemo(() => {
+    return categories.map(category => ({
+      ...category,
+      productCount: getProductsByCategory(category.id).length
+    }));
+  }, [categories, getProductsByCategory]);
 
   if (loading) {
     return (
@@ -88,24 +112,43 @@ const HomeComponent = () => {
             {/* All Products Button */}
             <CategoryButton
               active={selectedCategory === 'all'}
-              onClick={() => setSelectedCategory('all')}
+              onClick={() => handleCategoryChange('all')}
             >
-              All Products ({products.length})
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <span>All Products</span>
+                <Typography variant="caption" sx={{ 
+                  opacity: 0.8,
+                  fontWeight: selectedCategory === 'all' ? 600 : 400 
+                }}>
+                  ({products.length})
+                </Typography>
+              </Box>
             </CategoryButton>
             
-            {/* Category Buttons */}
-            {categories.map((category) => {
-              const categoryProducts = getProductsByCategory(category.id);
-              return (
-                <CategoryButton
-                  key={category.id}
-                  active={selectedCategory === category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                >
-                  {category.name} ({categoryProducts.length})
-                </CategoryButton>
-              );
-            })}
+            {/* Category Buttons with Enhanced Design */}
+            {categoryData.map((category) => (
+              <CategoryButton
+                key={category.id}
+                active={selectedCategory === category.id}
+                onClick={() => handleCategoryChange(category.id)}
+                sx={{
+                  transition: 'all 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateX(4px)',
+                  }
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <span>{category.name}</span>
+                  <Typography variant="caption" sx={{ 
+                    opacity: 0.8,
+                    fontWeight: selectedCategory === category.id ? 600 : 400 
+                  }}>
+                    ({category.productCount})
+                  </Typography>
+                </Box>
+              </CategoryButton>
+            ))}
           </CategorySidebar>
         </Grid>
 
@@ -124,24 +167,69 @@ const HomeComponent = () => {
           </Box>
 
           <ProductGrid container spacing={3}>
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product, index) => (
               <Grid item xs={12} sm={6} lg={4} key={product.id}>
-                <ProductCard>
-                  {/* Product Image */}
-                  <ProductImageContainer>
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
-                      }}
-                    />
-                  </ProductImageContainer>
+                <Zoom 
+                  in={!isTransitioning} 
+                  timeout={300}
+                  style={{ transitionDelay: `${index * 50}ms` }}
+                >
+                  <ProductCard
+                    sx={{
+                      transition: 'all 0.3s ease-in-out',
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
+                        boxShadow: (theme) => `0 12px 24px ${theme.palette.grey[400]}40`,
+                      }
+                    }}
+                  >
+                    {/* Product Image */}
+                    <ProductImageContainer>
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
+                        }}
+                      />
+                      {/* Trending Badge for Popular Items */}
+                      {product.rating.average >= 4.5 && (
+                        <Box
+                          sx={{
+                            position: 'absolute',
+                            top: 8,
+                            left: 8,
+                            backgroundColor: 'success.main',
+                            color: 'white',
+                            borderRadius: 1,
+                            px: 1,
+                            py: 0.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                          }}
+                        >
+                          <TrendingUp sx={{ fontSize: 14 }} />
+                          <Typography variant="caption" sx={{ fontWeight: 600 }}>
+                            Popular
+                          </Typography>
+                        </Box>
+                      )}
+                    </ProductImageContainer>
 
                   {/* Product Content */}
-                  <ProductContent>
-                    <Typography variant="h3" gutterBottom>
+                  <ProductContent className="product-content">
+                    <Typography variant="h3" gutterBottom sx={{
+                      transition: 'color 0.2s ease-in-out',
+                      fontWeight: 600,
+                      lineHeight: 1.3,
+                      height: '2.6em', // Fixed height for consistent layout
+                      overflow: 'hidden',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                    }}>
                       {product.name}
                     </Typography>
                     
@@ -195,26 +283,50 @@ const HomeComponent = () => {
                       fullWidth
                       variant="contained"
                       disabled={!product.inStock}
-                      sx={{ mt: 'auto' }}
+                      sx={{ 
+                        mt: 'auto',
+                        transition: 'all 0.2s ease-in-out',
+                        '&:hover:not(:disabled)': {
+                          transform: 'scale(1.02)',
+                        }
+                      }}
                     >
                       {product.inStock ? 'Add to Cart' : 'Out of Stock'}
                     </PrimaryActionButton>
                   </ProductContent>
                 </ProductCard>
-              </Grid>
-            ))}
+              </Zoom>
+            </Grid>
+          ))}
           </ProductGrid>
 
           {/* No Products Message */}
-          {filteredProducts.length === 0 && (
-            <Box sx={{ textAlign: 'center', py: 8 }}>
-              <Typography variant="h3" gutterBottom>
-                No products found
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Try selecting a different category or check back later.
-              </Typography>
-            </Box>
+          {filteredProducts.length === 0 && !isTransitioning && (
+            <Fade in={!isTransitioning} timeout={600}>
+              <Box sx={{ 
+                textAlign: 'center', 
+                py: 8,
+                background: 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)',
+                borderRadius: 2,
+                border: '1px dashed #ccc',
+              }}>
+                <Typography variant="h3" gutterBottom sx={{ 
+                  color: 'text.secondary',
+                  mb: 2 
+                }}>
+                  No products found
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                  Try selecting a different category or check back later.
+                </Typography>
+                <PrimaryActionButton 
+                  onClick={() => handleCategoryChange('all')}
+                  sx={{ mt: 2 }}
+                >
+                  View All Products
+                </PrimaryActionButton>
+              </Box>
+            </Fade>
           )}
         </Grid>
       </Grid>

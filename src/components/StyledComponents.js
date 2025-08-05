@@ -70,35 +70,84 @@ export const ProductCard = styled(Card)(({ theme }) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  padding: theme.spacing(4), // 16px card padding
-  backgroundColor: theme.palette.background.default,
+  padding: theme.spacing(4), // 16px padding per guidelines
+  backgroundColor: theme.palette.background.default, // #FFFFFF
   border: `1px solid ${theme.palette.grey[200]}`,
-  borderRadius: theme.spacing(2), // 8px border radius
-  transition: 'all 0.2s ease-in-out',
+  borderRadius: theme.spacing(2), // 8px rounded corners
+  transition: 'all 0.3s ease-in-out',
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+  
+  // Enhanced hover states from design guidelines
   '&:hover': {
-    boxShadow: theme.shadows[4], // Subtle elevation on hover
-    transform: 'translateY(-2px)',
-    borderColor: theme.palette.grey[300],
+    boxShadow: `0 8px 32px ${theme.palette.grey[400]}40`,
+    borderColor: theme.palette.primary.main, // #DB4444 border on hover
+    transform: 'translateY(-4px)',
+    
+    '& img': {
+      transform: 'scale(1.05)',
+    },
+    
+    '& .product-content': {
+      '& h3': {
+        color: theme.palette.primary.main, // #DB4444 title on hover
+      }
+    }
   },
+  
+  // Responsive sizing
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(3), // 12px on mobile
+  },
+  
   [theme.breakpoints.up('md')]: {
-    padding: theme.spacing(8), // 32px on larger screens
+    padding: theme.spacing(4), // 16px on tablet
+  },
+  
+  [theme.breakpoints.up('lg')]: {
+    padding: theme.spacing(6), // 24px on desktop
   },
 }));
 
 export const ProductImageContainer = styled(Box)(({ theme }) => ({
   width: '100%',
-  aspectRatio: '1', // Square aspect ratio
-  backgroundColor: theme.palette.grey[200], // #F5F5F5 background
-  borderRadius: theme.spacing(1),
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginBottom: theme.spacing(4),
+  aspectRatio: '4/3', // Consistent 4:3 aspect ratio per design guidelines
+  backgroundColor: theme.palette.grey[100], // #F5F5F5 background
+  borderRadius: theme.spacing(1), // 4px rounded corners
   overflow: 'hidden',
+  marginBottom: theme.spacing(3), // 12px spacing
+  position: 'relative',
+  
   '& img': {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    transition: 'transform 0.3s ease-in-out',
+    display: 'block',
+  },
+  
+  // Loading state placeholder
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: theme.palette.grey[100],
+    zIndex: -1,
+  },
+  
+  // Responsive sizing
+  [theme.breakpoints.down('sm')]: {
+    aspectRatio: '16/9', // Wider on mobile for better fit
+    marginBottom: theme.spacing(2),
+  },
+  
+  [theme.breakpoints.up('lg')]: {
+    aspectRatio: '4/3', // Standard on desktop
+    marginBottom: theme.spacing(4),
   },
 }));
 
@@ -136,11 +185,50 @@ export const OriginalPrice = styled(Typography)(({ theme }) => ({
 export const PrimaryActionButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main, // #DB4444
   color: theme.palette.primary.contrastText, // #FFFFFF
-  padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`, // 8px 12px
-  fontWeight: 500,
+  padding: `${theme.spacing(3)}px ${theme.spacing(4)}px`, // 12px 16px for better touch targets
+  fontWeight: 600,
+  borderRadius: theme.spacing(1), // 4px rounded corners
+  border: `2px solid ${theme.palette.primary.main}`,
+  transition: 'all 0.2s ease-in-out',
+  textTransform: 'none', // Preserve original casing
+  minHeight: '44px', // Minimum touch target
+  
+  // Enhanced hover state per design guidelines
   '&:hover': {
     backgroundColor: theme.palette.secondary.main, // #000000 on hover
+    borderColor: theme.palette.secondary.main,
     color: theme.palette.primary.contrastText,
+    transform: 'translateY(-2px)',
+    boxShadow: `0 6px 20px ${theme.palette.secondary.main}40`,
+  },
+  
+  // Focus state with outline per guidelines
+  '&:focus': {
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: '2px',
+  },
+  
+  // Active/pressed state
+  '&:active': {
+    transform: 'translateY(0px) scale(0.98)',
+    boxShadow: `0 2px 8px ${theme.palette.secondary.main}60`,
+  },
+  
+  // Disabled state
+  '&:disabled': {
+    backgroundColor: theme.palette.grey[300],
+    borderColor: theme.palette.grey[300],
+    color: theme.palette.grey[600],
+    transform: 'none',
+    boxShadow: 'none',
+    cursor: 'not-allowed',
+  },
+  
+  // Mobile responsive sizing
+  [theme.breakpoints.down('md')]: {
+    minHeight: '48px',
+    padding: `${theme.spacing(3)}px ${theme.spacing(4)}px`,
+    fontSize: '1rem',
   },
 }));
 
@@ -168,13 +256,42 @@ export const CategorySidebar = styled(Box)(({ theme }) => ({
 export const CategoryButton = styled(Button)(({ theme, active }) => ({
   width: '100%',
   justifyContent: 'flex-start',
-  padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
+  padding: `${theme.spacing(3)}px ${theme.spacing(4)}px`, // Increased padding for better touch targets
   marginBottom: theme.spacing(1),
+  borderRadius: theme.spacing(1), // 4px rounded corners
   color: active ? theme.palette.primary.contrastText : theme.palette.text.primary,
   backgroundColor: active ? theme.palette.primary.main : 'transparent',
+  border: `2px solid ${active ? theme.palette.primary.main : 'transparent'}`,
+  transition: 'all 0.2s ease-in-out',
+  position: 'relative',
+  overflow: 'hidden',
+  
+  // Enhanced hover states from design guidelines
   '&:hover': {
-    backgroundColor: active ? theme.palette.primary.main : theme.palette.grey[100],
+    backgroundColor: active ? theme.palette.primary.main : theme.palette.grey[50],
     color: active ? theme.palette.primary.contrastText : theme.palette.primary.main,
+    transform: 'translateX(4px)', // Subtle slide effect
+    boxShadow: `0 4px 12px ${theme.palette.grey[400]}40`,
+  },
+  
+  // Focus state with 2px outline per guidelines
+  '&:focus': {
+    outline: `2px solid ${theme.palette.primary.main}`,
+    outlineOffset: '2px',
+  },
+  
+  // Active/pressed state
+  '&:active': {
+    transform: 'translateX(2px) scale(0.98)',
+  },
+  
+  // Minimum touch target size for mobile (44px)
+  minHeight: '44px',
+  
+  // Responsive touch targets
+  [theme.breakpoints.down('md')]: {
+    minHeight: '48px', // Larger on mobile
+    padding: `${theme.spacing(3)}px ${theme.spacing(4)}px`,
   },
 }));
 
